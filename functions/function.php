@@ -138,34 +138,70 @@
         return $reponse;
     }
 
-    //AJOUT D'ADHERENTS AUX COFFRES, IDCOFFRES YI MARCHEIGOUL NAK
+    //METTRE A JOUR LE MOT DE PASSE
+    function updatePassword($idUser, $pass)
+    {
+        global $db;
+        $requete = $db->prepare('UPDATE utilisateur SET mdp=:pass WHERE idUtilisateur=:idUser');
+        $requete->execute(array(
+            ':idUser' => $idUser,
+            ':pass' => $pass));
+    }
+
+    //AJOUT D'ADHERENTS AUX COFFRES
     function addUtilisateurCoffre($idUtilisateur, $idCoffre){
         global $db;
         $requete = "INSERT INTO utilisateur_coffre(idUC, idUtilisateurF, idCoffreF) VALUES(null, '$idUtilisateur', '$idCoffre')" ;
         return $db->exec($requete);
     }
 
-    // function isAdherentAlreadyInCoffre($idUtilisateur, $coffre){
-    //     global $db;
-    //     $requete = $db -> prepare("SELECT idUtilisateurF=?, idCoffre=? FROM utilisateur_coffre");
-    //     $requete->execute(array($idUtilisateur,$coffre));
-    //     $reponse = $requete->fetch();
-    //     return $reponse[0];
-    // }
+    // FONCTION QUI VERIFIE SI UN ADHERENT EST DEJA DANS UN COFFRE
+    function isAdherentAlreadyInCoffre($idUtilisateur, $coffre){
+        global $db;
+        $requete = $db -> prepare("SELECT * FROM utilisateur_coffre WHERE idUtilisateurF=? AND idCoffreF=?");
+        $requete->execute(array($idUtilisateur,$coffre));
+        $reponse = $requete->fetch();
+        return $reponse[0];
+    }
 
-
-
-
-
-
-
+    // FONCTION QUI RETOURNE LES INFOS DE TOUS LES ADHERENTS D'UN COFFRE
     function getAdherents($numCoffre)
     {
         global $db;
-        $requete = $db -> prepare("SELECT * FROM coffre, utilisateur WHERE coffre.idUtilisateurF = utilisateur.idUtilisateur AND numCoffre=?");
+        $requete = $db -> prepare("SELECT * FROM utilisateur_coffre, coffre, utilisateur WHERE utilisateur_coffre.idUtilisateurF = utilisateur.idUtilisateur AND coffre.idCoffre = utilisateur_coffre.idCoffreF AND numCoffre=?");
         $requete->execute(array($numCoffre));
         $reponse = $requete->fetchAll();
         return $reponse;
+    }
+
+    // FONCTION QUI SUPPRIME UN ADHERENT D'UN COFFRE
+    function deleteAdherent($idUC)
+    {
+        global $db;
+        $db->exec("DELETE FROM utilisateur_coffre WHERE idUC = $idUC");
+    }
+
+    // FONCTION QUI TE RETOURNE LE NOMBRE D'ADHERENT D'UN COFFRE
+    function getNumberOfAdherents($idCoffre)
+    {
+        global $db;
+        $requete = $db -> prepare("SELECT COUNT(*) FROM utilisateur_coffre WHERE idCoffreF=?");
+        $requete->execute(array($idCoffre));
+        $reponse = $requete->fetch();
+        return $reponse[0];
+    }
+
+    function AjoutAdherentParTresorier($idCoffreAdherent, $nom, $prenom, $telephone, $login, $mdp, $mail, $adresse, $idProfil)
+    {
+        global $db; 
+        // Recupération de l'id le plus grand 
+        $requete = "SELECT MAX(idUtilisateur) FROM utilisateur"; 
+        $rslt = $db->query($requete)->fetch(); //array
+        $idMax = $rslt[0]+1 ;
+        $requete2 = "INSERT INTO utilisateur(idUtilisateur, nom, prenom, tel, login, mdp, adresse, mail, idProfilF) VALUES(null, '$nom', '$prenom', '$telephone', '$login', '$mdp', '$adresse', '$mail', $idProfil)" ;
+        $requete3 = "INSERT INTO utilisateur_coffre(idUC, idUtilisateurF, idCoffreF) VALUES(null, '$idMax', '$idCoffreAdherent')" ;
+        $db->exec($requete2);   
+        return $db->exec($requete3);
     }
 
 ?>

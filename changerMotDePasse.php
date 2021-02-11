@@ -69,6 +69,10 @@
           <div class="form-group">
             <label for="">Confirmez votre mot de passe (*)</label>
             <input type="password" class="form-control" id="pass2" name="pass2" required>
+          </div>  
+          <div class="form-group" hidden>
+            <label for="">ID Utilisateur connecté</label>
+            <input type="text" class="form-control" id="idUser" name="idUser" value="<?php if (isset($_SESSION["login"])){echo getIdUtilisateur($_SESSION["login"]);} ?>">
           </div>     
           <button type="submit" class="btn btn-outline-dark shadow-none" name="changerMotDePasse">Confirmer</button>
         </div>

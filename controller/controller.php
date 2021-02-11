@@ -5,7 +5,7 @@
 
     extract($_POST);
 
-    if(isset($connexion))
+    if(isset($connexion)) //GERE LA CONNEXION 
     {
         if(getLoginAndPassword($login,$password)){
             $_SESSION["login"] = $login;
@@ -37,7 +37,7 @@
         }
     }
 
-    if(isset($inscription))
+    if(isset($inscription)) // GERE L'INSCRIPTION
     {
         if(isNumValid($telephone) && isStringAlpha($nom) && isStringAlpha($prenom) && !isLoginAlreadyTaken($login) && $pass===$pass2)
         {
@@ -72,7 +72,7 @@
         }
     }
 
-    if(isset($ajoutCoffre))
+    if(isset($ajoutCoffre)) // GERE L'AJOUT DE COFFRES
     {
         if($cotisation>0 && $nbAdherent>0 && compareDates($datefin, $datedebut))
         {
@@ -90,26 +90,27 @@
         }
     }
 
-    if(isset($deconnexion))
+    if(isset($deconnexion)) // GERE LA DECONNEXION 
     {
         session_destroy();
         unset($_SESSION["login"]);
         header("Location:../index.php");
     }
 
-    if(isset($ajoutUserOuTresorier))
+    if(isset($ajoutUserOuTresorier)) // GERE LAJOUT DUTILISATEUR OU DE TRESORIER VOIR PAGE AJOUTADHERENTS
     {
         if(isNumValid($telephone) && isStringAlpha($nom) && isStringAlpha($prenom) && !isLoginAlreadyTaken($login))
         {
-            registerUser($nom, $prenom, $telephone, $login, $pass, $mail, $adresse, $usertype);
             if($_SESSION["profil"] == "admin")
             {
+                registerUser($nom, $prenom, $telephone, $login, $pass, $mail, $adresse, $usertype);
                 $_SESSION["success"] = "Trésorier ajouté avec succès !";
                 header("Location:../listeTresoriers.php");
             }
             elseif($_SESSION["profil"] == "tresorier")
             {
-                //
+                //IL FAUT AUSSI RENSEIGNER LADHESION DANS LA TABLE utilisateur_coffre
+                AjoutAdherentParTresorier($idCoffreAdherent, $nom, $prenom, $telephone, $login, $pass, $mail, $adresse, $usertype);
                 $_SESSION["success"] = "Adhérent ajouté avec succès !";
                 header("Location:../listeCoffresTresorier.php");
             }
@@ -136,13 +137,13 @@
         }
     }
 
-    if(isset($adherer)){
+    if(isset($adherer)){ // GERE LADHESION D'UTILISATEURS
         addUtilisateurCoffre($idUtilisateur,$idCoffre);
         $_SESSION["success"] = "Vous avez été ajouté avec succès !";
         header("Location:../ListeDesCoffres.php");
     }
 
-    if(isset($changerMotDePasse))
+    if(isset($changerMotDePasse)) // GERE LES CHANGEMENTS DE MOT DE PASSE LORSQUE LE MDP == "passer"
     {
         if($pass != $pass2)
         {
@@ -150,8 +151,16 @@
         }
         else
         {
+            updatePassword($idUser,$pass);
             $_SESSION["success"] = "Mot de passe modifié avec succès !";
         }
         header("Location:../changerMotDePasse.php");
+    }
+
+    if(isset($supprimer)) // GERE LA SUPPRESSION D'ADHERENT
+    {
+        deleteAdherent($idUC);
+        $_SESSION["success"] = "Adhérent supprimé avec succès !";
+        header("Location:../listeCoffresTresorier.php");
     }
 ?>

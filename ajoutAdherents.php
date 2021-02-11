@@ -65,13 +65,17 @@
                         <label for="">Mot de passe</label>
                         <input type="text" class="form-control" id="pass" name="pass" value="passer" required>
                     </div>
+                    <div class="form-group" hidden> <!--AJOUT D'UNE DIVISION QUI VA NOUS FOURNIR L'ID DU COFFRE DANS LEQUEL NS DEVONS AJOUTER L'ADHERENT-->
+                        <label for="">ID COFFRE</label>
+                        <input type="text" class="form-control" id="idCoffreAdherent" name="idCoffreAdherent" value="<?php if(isset($_POST["idCoffre"])) echo $_POST["idCoffre"];?>" >
+                    </div>
                     <div class="form-group" hidden>
                         <label for="">UserType</label>
                         <?php 
                          if($_SESSION["profil"] == "admin") 
                             echo '<input type="text" class="form-control" id="usertype" name="usertype" value="2" >';
                          elseif($_SESSION["profil"] == "tresorier") 
-                            echo '<input type="text" class="form-control" id="usertype" name="usertype" value="1" >';
+                            echo '<input type="text" class="form-control" id="usertype" name="usertype" value="3" >';
                         ?>
                     </div>
                     <?php

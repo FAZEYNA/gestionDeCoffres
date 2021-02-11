@@ -31,7 +31,7 @@
         }
     ?>
     <p class="display-4 text-center mb-3 mt-3">Liste des coffres</p>
-    <a href='ajoutCoffre.php' class="btn btn-outline-dark mb-4">Ajouter un coffre</a>
+    <a href='ajoutCoffre.php' class="btn btn-outline-dark mb-4 ">Ajouter un coffre</a>
         <table class="table table-bordered table-hover">
             <thead class="thead-dark">
             <tr class="table-primary text-center">
@@ -46,30 +46,47 @@
             <tbody>
                 <?php foreach($tabCoffres as $t) { ?>
                     <tr class="text-center">
-                        <td><?=$t["numCoffre"]?></td>
+                        <td><?=$t["numCoffre"]?></td> 
                         <td><?=$t["dateDebut"]?></td>
                         <td><?= dateDiff($t["dateDebut"],$t["dateFin"])?> jours</td>
                         <td><?=$t["nbrAdherents"]?></td>
                         <td><?=$t["nbrAdherents"] * $t["cotisation"]?></td>
-                        <td><a href="ajoutAdherents.php" class="btn btn-block btn-outline-dark">ajouter</a></td>
-                        <td><a data-toggle="modal" data-target="#myModal" class="btn btn-block btn-outline-dark">voir</a></td>
+                        <!-- CREATION DUN PETIT FORMULAIRE QUI VA NOUS REDIRIGER VERS LA PAGE ajoutAdherents.php AVEC UN BOUTON QUI AURA LA VALEUR DE L'ID COFFRE ACTUEL -->
+                        <form method="POST" action="ajoutAdherents.php">
+                        <td><button type="submit" class="btn btn-block btn-outline-dark" name="idCoffre" value="<?=$t["idCoffre"]?>">ajouter</button></td>
+                        </form>
+                        <td><a data-toggle="modal" data-target="#myModal-<?=$t["numCoffre"]?>" class="btn btn-block btn-outline-dark">voir</a></td>
                           <!-- Modal -->
-                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="myModal-<?=$t["numCoffre"]?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-<?=$t["numCoffre"]?>" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Liste des Adhérents</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel-<?=$t["numCoffre"]?>">Liste des Adhérents</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                 <div class="modal-body">
-                                    <div class="flex-row d-flex">
+                                    <?php
+                                      $adherentsDuCoffre = getAdherents($t["numCoffre"]);                  
+                                   ?> 
+                                    <div class="flex-row d-flex text-center mb-4">
                                         <div class="col">Nom</div>
                                         <div class="col">Prénom(s)</div>
                                         <div class="col">Téléphone</div>
                                         <div class="col">Action</div>
                                     </div>
+                                    <?php foreach($adherentsDuCoffre as $a){?>
+                                    <div class="flex-row d-flex text-center mb-3">
+                                      <div class="col"><?= $a["prenom"]?></div>
+                                      <div class="col"><?= $a["nom"]?></div>
+                                      <div class="col"><?= $a["tel"]?></div>  
+                                      <form method="POST" action="controller/controller.php">
+                                        <div class="col" hidden><input type="text" value="<?=$a["idUC"]?>" name="idUC"></div>  
+                                        <div class="col"><button type="submit" name="supprimer" class="btn btn-outline-danger shadow-none">supprimer</button></div> 
+                                      </form>   
+                                    </div>
+                                  <?php }?>
                                 </div>
                             </div>
                         </div>

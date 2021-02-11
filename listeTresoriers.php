@@ -1,5 +1,4 @@
 <?php
-
     session_start();
     require_once "functions/function.php";
     require_once "database/connection.php";
@@ -45,13 +44,14 @@
                     <td><?= $t["nom"]?></td>
                     <td><?= $t["prenom"]?></td>
                     <td><?= $t["tel"]?></td>
-                    <td><a data-toggle="modal" data-target="#myModal" class="btn btn-block btn-outline-dark">voir</a></td>
+                    <!-- LES ID ETAIENT SIMILAIRES, EN METTANT A CHAQUE FOIS LID DE LUTILISATEUR JE SPECIFIE LES COFFRES QUI APPARTIENNENT A CHACUN -->
+                    <td><a data-toggle="modal" data-target="#myModal-<?=$t["idUtilisateur"] ?>" class="btn btn-block btn-outline-dark">voir</a></td>
                           <!-- Modal -->
-                        <div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade bs-example-modal-lg" id="myModal-<?=$t["idUtilisateur"]?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-<?=$t["idUtilisateur"]?>" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Liste des coffres</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel-<?=$t["idUtilisateur"]?>">Liste des coffres</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>

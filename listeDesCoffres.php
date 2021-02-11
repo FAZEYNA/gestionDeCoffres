@@ -63,38 +63,45 @@
             unset($_SESSION["success"]);
         }
     ?>
+
+    <!-- J'ai eu un soucis pour recupérer les ID DE COFFRES LA SOLUTION ETAIT DE METTRE POUR CHAQUE COFFRE UN FORMULAIRE -->
     <p class="display-4 text-center mb-4 mt-3">Liste des coffres disponibles</p>
-    <form method="POST" action="controller/controller.php">
     <div class="row mt-3">
         <?php foreach($tabCoffres as $t){?>
-        <div class="col-4 mt-3">
-            <div class="card border-dark">
-                <div class="card-body">
-                    <h5 class="card-title p-3">Coffre N°<?=$t["numCoffre"]?></h5>
-                    <p class="card-text">Date de début : <?=$t["dateDebut"]?> </p>
-                    <p class="card-text">Date de fin : <?=$t["dateFin"]?></p>
-                    <p class="card-text">Durée : <?= dateDiff($t["dateDebut"],$t["dateFin"])?> jours</p>
-                    <p class="card-text">Côtisation : <?=$t["cotisation"]?> Francs</p>
-                    <p class="card-text">Montant : <?=$t["cotisation"] * $t["nbrAdherents"]?> Francs</p>
-                    <p class="card-text">Nombre d'Adhérents : <?=$t["nbrAdherents"]?></p>
-                    <input type="number"  value="<?=$t["idCoffre"]?>" name="idCoffre">
-                    <input type="number" hidden value="<?php if (isset($_SESSION["login"])){echo getIdUtilisateur($_SESSION["login"]);} ?>" name="idUtilisateur">
-                    <?php 
-                        if(isset($_SESSION["login"]) )
-                        {
-                            echo '<button type="submit" name="adherer" class="btn btn-outline-dark float-right">Adhérer</button">';
-                        }
-                        else
-                        {
-                            echo '<a data-toggle="modal" data-target="#myModal" class="btn btn-outline-dark float-right">Adhérer</a>';
-                        }
-                    ?>
+            <div class="col-4 mt-3">
+            <form method="POST" action="controller/controller.php">
+                <div class="card border-dark">
+                    <div class="card-body">
+                        <h5 class="card-title p-3">Coffre N°<?=$t["numCoffre"]?></h5>
+                        <p class="card-text">Date de début : <?=$t["dateDebut"]?> </p>
+                        <p class="card-text">Date de fin : <?=$t["dateFin"]?></p>
+                        <p class="card-text">Durée : <?= dateDiff($t["dateDebut"],$t["dateFin"])?> jours</p>
+                        <p class="card-text">Côtisation : <?=$t["cotisation"]?> Francs</p>
+                        <p class="card-text">Montant : <?=$t["cotisation"] * $t["nbrAdherents"]?> Francs</p>
+                        <p class="card-text">Nombre d'Adhérents : <?=$t["nbrAdherents"]?></p>
+                        <input type="number" hidden value="<?=$t["idCoffre"]?>" name='idCoffre'>
+                        <input type="number" hidden value="<?php if (isset($_SESSION["login"])){echo getIdUtilisateur($_SESSION["login"]);} ?>" name="idUtilisateur">
+                        <?php 
+                            //Ne pas oublier qu'un coffre est disponible si le nombre d’adhérents et la date d’échéance ne sont pas atteints
+                            if(isset($_SESSION["login"]) && (isAdherentAlreadyInCoffre(getIdUtilisateur($_SESSION["login"]), $t["idCoffre"]) || getNumberOfAdherents($t["idCoffre"])>=$t["nbrAdherents"] || compareDates(date('Y-m-d'),$t["dateFin"])))
+                            {
+                                echo '<button type="submit" name="adherer" disabled class="btn btn-outline-dark float-right">Adhérer</button">';
+                            }
+                            else if(isset($_SESSION["login"]))
+                            {
+                                echo '<button type="submit" name="adherer" class="btn btn-outline-dark float-right">Adhérer</button">';
+                            }
+                            elseif(!isset($_SESSION["login"]) )
+                            {
+                                echo '<a data-toggle="modal" data-target="#myModal" class="btn btn-outline-dark float-right">Adhérer</a>';
+                            }
+                        ?>
+                    </div>
                 </div>
+            </form>
             </div>
-        </div>
-    <?php }?>
-</div>
-</form>
+        <?php }?>
+    </div>
 
 
 <?php include_once "footer.php"?>
