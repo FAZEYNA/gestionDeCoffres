@@ -32,10 +32,10 @@
         <table class="table table-bordered table-hover">
             <thead class="thead-dark">
             <tr class="table-primary text-center">
-                <th scope="col">Nom</th>
+                <th scope="col" >Nom</th>
                 <th scope="col">Prénom(s)</th>
                 <th scope="col">Téléphone</th>
-                <th scope="col">Action</th>
+                <th scope="col" colspan="2" class="text-center">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -45,8 +45,8 @@
                     <td><?= $t["prenom"]?></td>
                     <td><?= $t["tel"]?></td>
                     <!-- LES ID ETAIENT SIMILAIRES, EN METTANT A CHAQUE FOIS LID DE LUTILISATEUR JE SPECIFIE LES COFFRES QUI APPARTIENNENT A CHACUN -->
-                    <td><a data-toggle="modal" data-target="#myModal-<?=$t["idUtilisateur"] ?>" class="btn btn-block btn-outline-dark">voir</a></td>
-                          <!-- Modal -->
+                    <td><a data-toggle="modal" data-target="#myModal-<?=$t["idUtilisateur"] ?>" class="btn btn-block btn-outline-dark">voir</a> </td>                   
+                    <!-- Modal -->
                         <div class="modal fade bs-example-modal-lg" id="myModal-<?=$t["idUtilisateur"]?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-<?=$t["idUtilisateur"]?>" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
@@ -82,6 +82,30 @@
                             </div>
                         </div>
                     </div>
+                    <td><a class="btn text-danger btn-block btn-outline-danger" data-toggle="modal" data-target="#myModal--<?=$t["idUtilisateur"] ?>">supprimer</a> </td>
+                        <!-- Ajout d'un Modal qui gere la suppression de trésorier -->
+                        <div class="modal fade bs-example-modal-md" id="myModal--<?=$t["idUtilisateur"]?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel--<?=$t["idUtilisateur"]?>" aria-hidden="true">
+                          <div class="modal-dialog modal-md" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel--<?=$t["idUtilisateur"]?>">Suppression de trésorier</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                              </button>
+                              </div>
+                              <div class="modal-body">
+                                <p>Voulez-vous vraiment supprimer le trésorier <?= $t['prenom']. " " .$t['nom']?> ?</p>
+                              </div>
+                              <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                              <form method="POST" action="controller/controller.php">
+                                  <button type="submit" class="btn btn-danger" name="supprimerTresorier">Supprimer</button>
+                                  <input hidden type="text" name="idTresorier" value="<?=$t['idUtilisateur']?>">
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                   </tr>
               <?php }?>
             </tbody>

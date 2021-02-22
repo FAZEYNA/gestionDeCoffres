@@ -81,10 +81,31 @@
                                       <div class="col"><?= $a["prenom"]?></div>
                                       <div class="col"><?= $a["nom"]?></div>
                                       <div class="col"><?= $a["tel"]?></div>  
-                                      <form method="POST" action="controller/controller.php">
-                                        <div class="col" hidden><input type="text" value="<?=$a["idUC"]?>" name="idUC"></div>  
-                                        <div class="col"><button type="submit" name="supprimer" class="btn btn-outline-danger shadow-none">supprimer</button></div> 
-                                      </form>   
+                                      <div class="col" hidden><input type="text" value="<?=$a["idUC"]?>" name="idUC"></div>  
+                                      <div class="col"><button type="button" class="btn btn-outline-danger shadow-none" data-toggle="modal" data-target="#exampleModal-<?=$a["idUC"]?>">Supprimer</button></div> 
+                                        <!-- Ajout d'un Modal pour confirmer la suppression d'adherent -->
+                                        <div class="modal fade" id="exampleModal-<?=$a["idUC"]?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-<?=$a["idUC"]?>" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel-<?=$a["idUC"]?>">Suppression</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                            <p>Voulez-vous vraiment supprimer l'adhérent(e) <?= $a["prenom"]. " " .$a["nom"]?> ?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                                <form method="POST" action="controller/controller.php">
+                                                <button type="submit" class="btn btn-danger" name="supprimer">Supprimer</button>
+                                                    <input hidden type="text" name="idUC" value="<?=$a["idUC"]?>">
+                                                </form>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </div>
                                     </div>
                                   <?php }?>
                                 </div>

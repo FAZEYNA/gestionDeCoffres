@@ -78,7 +78,7 @@
         {
             addCoffre($datedebut, $datefin, $nbAdherent, $cotisation, $idUtilisateur);
             $_SESSION["success"] = "Coffre ajouté avec succès !";
-            header("Location:../AjoutCoffre.php");
+            header("Location:../listeCoffresTresorier.php");
         }
         else
         {
@@ -153,6 +153,7 @@
         {
             updatePassword($idUser,$pass);
             $_SESSION["success"] = "Mot de passe modifié avec succès !";
+            unset($_SESSION["login"]);
         }
         header("Location:../changerMotDePasse.php");
     }
@@ -162,5 +163,12 @@
         deleteAdherent($idUC);
         $_SESSION["success"] = "Adhérent supprimé avec succès !";
         header("Location:../listeCoffresTresorier.php");
+    }
+
+    if(isset($supprimerTresorier)) // GERE LA SUPPRESSION DE TRESORIER
+    {
+        deleteTresorier($idTresorier);
+        $_SESSION["success"] = "Tresorier supprimé avec succès !";
+        header("Location:../listeTresoriers.php");
     }
 ?>

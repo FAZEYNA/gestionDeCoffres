@@ -23,7 +23,7 @@
     function getLoginAndPassword($login, $password)
     {
         global $db;
-        $requete = "SELECT * FROM utilisateur WHERE login = '$login' AND mdp = '$password'";
+        $requete = "SELECT * FROM utilisateur WHERE login = '$login' AND mdp = '$password' AND etat=1";
         $reponse = $db->query($requete)->fetch();
         return $reponse;
     }
@@ -32,7 +32,7 @@
     function registerUser($nom, $prenom, $telephone, $login, $mdp, $mail, $adresse, $idProfil)
     {
         global $db;
-        $requete = "INSERT INTO utilisateur(idUtilisateur, nom, prenom, tel, login, mdp, adresse, mail, idProfilF) VALUES(null, '$nom', '$prenom', '$telephone', '$login', '$mdp', '$adresse', '$mail', $idProfil)" ;
+        $requete = "INSERT INTO utilisateur(idUtilisateur, nom, prenom, tel, login, mdp, adresse, mail, idProfilF, etat) VALUES(null, '$nom', '$prenom', '$telephone', '$login', '$mdp', '$adresse', '$mail', $idProfil, 1)" ;
         return $db->exec($requete);
     }
 
@@ -133,7 +133,7 @@
     function getTresoriers()
     {
         global $db;
-        $requete = "SELECT * FROM utilisateur, profil WHERE utilisateur.idProfilF = profil.idProfil AND idProfilF=2";
+        $requete = "SELECT * FROM utilisateur, profil WHERE utilisateur.idProfilF = profil.idProfil AND idProfilF=2 AND utilisateur.etat=1";
         $reponse = $db->query($requete)->fetchAll(PDO::FETCH_ASSOC);
         return $reponse;
     }
@@ -198,10 +198,26 @@
         $requete = "SELECT MAX(idUtilisateur) FROM utilisateur"; 
         $rslt = $db->query($requete)->fetch(); //array
         $idMax = $rslt[0]+1 ;
-        $requete2 = "INSERT INTO utilisateur(idUtilisateur, nom, prenom, tel, login, mdp, adresse, mail, idProfilF) VALUES(null, '$nom', '$prenom', '$telephone', '$login', '$mdp', '$adresse', '$mail', $idProfil)" ;
+        $requete2 = "INSERT INTO utilisateur(idUtilisateur, nom, prenom, tel, login, mdp, adresse, mail, idProfilF, etat) VALUES(null, '$nom', '$prenom', '$telephone', '$login', '$mdp', '$adresse', '$mail', $idProfil, 1)" ;
         $requete3 = "INSERT INTO utilisateur_coffre(idUC, idUtilisateurF, idCoffreF) VALUES(null, '$idMax', '$idCoffreAdherent')" ;
         $db->exec($requete2);   
         return $db->exec($requete3);
+    }
+
+    function deleteTresorier($idTresorier)
+    {
+        global $db;
+        $requete = $db->prepare('UPDATE utilisateur SET etat=0 WHERE idUtilisateur=:id');
+        return $requete->execute(array(
+            ':id' => $idTresorier));
+    }
+
+    function getNumberOfCoffres()
+    {
+        global $db;
+        $reponse = $db->query('SELECT COUNT(*) FROM coffre');
+        $donnees = $reponse->fetch();
+        return intval($donnees[0]);
     }
 
 ?>
