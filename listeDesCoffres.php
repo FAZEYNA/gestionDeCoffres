@@ -3,7 +3,6 @@
     require_once "functions/function.php"; // J'inclus mon fichier de fonctions
     require_once "database/connection.php"; // J'inclus mon fichier de connexion à ma BD
     include_once "header.php";
-    $tabCoffres = getTousLesCoffres();
 ?>
 
 <!-- Image and text -->
@@ -63,7 +62,19 @@
             unset($_SESSION["success"]);
         }
     ?>
-
+    <?php
+        // On détermine sur quelle page on se trouve
+        if(isset($_GET['page']) && !empty($_GET['page'])){
+            $pageCourante = (int) strip_tags($_GET['page']);
+        }else{
+            $pageCourante = 1;
+        }
+        $pas = 3; //3 Coffres par page
+        $nbCoffres = getNumberOfCoffres(); //nbr total de Coffres 
+        $nbPages = ceil($nbCoffres / $pas); //nombre total de pages
+        $premier = ($pageCourante * $pas) - $pas;
+        $tabCoffres = getCoffresParPage($premier,$pas);
+    ?>
     <!-- J'ai eu un soucis pour recupérer les ID DE COFFRES LA SOLUTION ETAIT DE METTRE POUR CHAQUE COFFRE UN FORMULAIRE -->
     <p class="display-4 text-center mb-4 mt-3">Liste des coffres disponibles</p>
     <div class="row mt-3">
@@ -102,6 +113,23 @@
             </div>
         <?php }?>
     </div>
-
+    <nav class="float-right mt-1">
+        <ul class="pagination">
+            <!-- Lien vers la page précédente (désactivé si on se trouve sur la 1ère page) -->
+            <li class="page-item <?= ($pageCourante == 1) ? "disabled" : "" ?>">
+                <a href="./listeDesCoffres.php?page=<?= $pageCourante - 1 ?>" class="page-link">Précédente</a>
+            </li>
+            <?php for($page = 1; $page <= $nbPages; $page++): ?>
+                <!-- Lien vers chacune des pages (activé si on se trouve sur la page correspondante) -->
+                <li class="page-item <?= ($pageCourante == $page) ? "active" : "" ?>">
+                    <a href="./listeDesCoffres.php?page=<?= $page ?>" class="page-link"><?= $page ?></a>
+                </li>
+            <?php endfor ?>
+                <!-- Lien vers la page suivante (désactivé si on se trouve sur la dernière page) -->
+                <li class="page-item <?= ($pageCourante == $nbPages) ? "disabled" : "" ?>">
+                <a href="./listeDesCoffres.php?page=<?=$pageCourante + 1 ?>" class="page-link">Suivante</a>
+            </li>
+        </ul>
+    </nav>
 
 <?php include_once "footer.php"?>

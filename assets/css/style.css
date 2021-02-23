@@ -130,3 +130,8 @@ header:before{
     background-color:#D2AD7B;
 }
 
+.page-link, .page-item{
+    color:#D2AD7B ;
+    font-weight: bold;
+}
+

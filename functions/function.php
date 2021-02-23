@@ -220,4 +220,15 @@
         return intval($donnees[0]);
     }
 
+    function getCoffresParPage($premier, $parPage)
+    {
+        global $db;
+        $requete = $db->prepare("SELECT * FROM coffre, utilisateur WHERE coffre.idUtilisateurF = utilisateur.idUtilisateur ORDER BY numCoffre LIMIT :premier, :parpage ");
+        $requete->bindValue(':premier', $premier, PDO::PARAM_INT);
+        $requete->bindValue(':parpage', $parPage, PDO::PARAM_INT);
+        $requete->execute();
+        $donnees = $requete->fetchAll(PDO::FETCH_ASSOC);
+        return $donnees;
+    }
+
 ?>
