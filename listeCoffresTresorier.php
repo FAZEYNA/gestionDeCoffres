@@ -29,6 +29,11 @@
             echo "<h4 class='text-success text-center mb-4 mt-3'>".$_SESSION["success"]."</h4>";
             unset($_SESSION["success"]);
         }
+        else if(isset($_SESSION["error"]) && $_SESSION["error"] != "")
+        {
+            echo "<h4 class='text-danger text-center mb-4 mt-3'>".$_SESSION["error"]."</h4>";
+            unset($_SESSION["error"]);
+        }
     ?>
     <p class="display-4 text-center mb-3 mt-3">Liste des coffres</p>
     <a href='ajoutCoffre.php' class="btn btn-outline-dark mb-4 ">Ajouter un coffre</a>
@@ -37,6 +42,7 @@
             <tr class="table-primary text-center">
                 <th scope="col">N°</th>
                 <th scope="col">Date de début</th>
+                <th scope="col">Date de fin</th>
                 <th scope="col">Durée</th>
                 <th scope="col">Nombre d'adhérents</th>
                 <th scope="col">Montant</th>
@@ -48,6 +54,7 @@
                     <tr class="text-center">
                         <td><?=$t["numCoffre"]?></td> 
                         <td><?=$t["dateDebut"]?></td>
+                        <td><?=$t["dateFin"]?></td>
                         <td><?= dateDiff($t["dateDebut"],$t["dateFin"])?> jours</td>
                         <td><?=$t["nbrAdherents"]?></td>
                         <td><?=$t["nbrAdherents"] * $t["cotisation"]?></td>

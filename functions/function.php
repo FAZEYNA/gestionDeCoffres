@@ -1,4 +1,5 @@
 <?php
+    // Le risque d’injection SQL est minimisé puisque notre requête est pré-formatée et nous n’avons donc pas besoin de protéger nos paramètres ou valeurs manuellement. Donc je transforme toutes les requêtes non préparées.
 
     //Vérifier la validité du nom et du prénom
     function isStringAlpha($string)
@@ -23,17 +24,18 @@
     function getLoginAndPassword($login, $password)
     {
         global $db;
-        $requete = "SELECT * FROM utilisateur WHERE login = '$login' AND mdp = '$password' AND etat=1";
-        $reponse = $db->query($requete)->fetch();
-        return $reponse;
+        $requete = $db->prepare("SELECT * FROM utilisateur WHERE login = ? AND mdp = ? AND etat=?");
+        $requete->execute(array($login, $password, 1));
+        return $requete->fetch();
     }
      
     //AJOUT D'ADHERENT DANS LA BD
-    function registerUser($nom, $prenom, $telephone, $login, $mdp, $mail, $adresse, $idProfil)
+    function registerUser($nom, $prenom, $telephone, $login, $mdp ,$mail, $adresse, $idProfil)
     {
         global $db;
-        $requete = "INSERT INTO utilisateur(idUtilisateur, nom, prenom, tel, login, mdp, adresse, mail, idProfilF, etat) VALUES(null, '$nom', '$prenom', '$telephone', '$login', '$mdp', '$adresse', '$mail', $idProfil, 1)" ;
-        return $db->exec($requete);
+        $requete = $db->prepare("INSERT INTO utilisateur(idUtilisateur, nom, prenom, tel, login, mdp, adresse, mail, idProfilF, etat) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)") ;
+        $reponse = $requete->execute(array(null, $nom, $prenom, $telephone, $login, $mdp, $adresse, $mail, $idProfil, 1));
+        return $reponse;
     }
 
     //VERIFICATION DE LA REDONDANCE DU LOGIN
@@ -64,9 +66,9 @@
         global $db;
 
         $numCoffre = getNumeroCoffre();
-        $requete = "INSERT INTO coffre(idCoffre, numCoffre, dateDebut, dateFin, nbrAdherents, cotisation, idUtilisateurF) VALUES(null, '$numCoffre', '$dateDebut', '$dateFin', '$nbAdherents', '$cotisation', '$idUtilisateur')" ;
-
-        return $db->exec($requete);
+        $requete = $db->prepare("INSERT INTO coffre(idCoffre, numCoffre, dateDebut, dateFin, nbrAdherents, cotisation, idUtilisateurF) VALUES(?, ?, ?, ?, ?, ?, ?)") ;
+        $reponse = $requete->execute(array(null, $numCoffre, $dateDebut, $dateFin, $nbAdherents, $cotisation, $idUtilisateur));
+        return $reponse;
     }
 
     // Retourne l'id de l'utilisateur connecté
@@ -99,7 +101,7 @@
     function getTousLesCoffres()
     {
         global $db;
-        $requete = "SELECT * FROM coffre, utilisateur WHERE coffre.idUtilisateurF = utilisateur.idUtilisateur ORDER BY numCoffre";
+        $requete = "SELECT * FROM coffre, utilisateur WHERE coffre.idUtilisateurF = utilisateur.idUtilisateur AND utilisateur.etat = 1 ORDER BY numCoffre";
         $reponse = $db->query($requete)->fetchAll(PDO::FETCH_ASSOC);
         return $reponse;
     }
@@ -133,9 +135,9 @@
     function getTresoriers()
     {
         global $db;
-        $requete = "SELECT * FROM utilisateur, profil WHERE utilisateur.idProfilF = profil.idProfil AND idProfilF=2 AND utilisateur.etat=1";
-        $reponse = $db->query($requete)->fetchAll(PDO::FETCH_ASSOC);
-        return $reponse;
+        $requete = $db->prepare("SELECT * FROM utilisateur, profil WHERE utilisateur.idProfilF = profil.idProfil AND idProfilF=? AND utilisateur.etat=?");
+        $requete->execute(array(2,1));
+        return $requete->fetchAll(PDO::FETCH_ASSOC);
     }
 
     //METTRE A JOUR LE MOT DE PASSE
@@ -151,8 +153,9 @@
     //AJOUT D'ADHERENTS AUX COFFRES
     function addUtilisateurCoffre($idUtilisateur, $idCoffre){
         global $db;
-        $requete = "INSERT INTO utilisateur_coffre(idUC, idUtilisateurF, idCoffreF) VALUES(null, '$idUtilisateur', '$idCoffre')" ;
-        return $db->exec($requete);
+        $requete = $db->prepare("INSERT INTO utilisateur_coffre(idUC, idUtilisateurF, idCoffreF) VALUES(?, ?, ?)");
+        $reponse = $requete->execute(null, $idUtilisateur, $idCoffre);
+        return $reponse;
     }
 
     // FONCTION QUI VERIFIE SI UN ADHERENT EST DEJA DANS UN COFFRE
@@ -223,7 +226,7 @@
     function getCoffresParPage($premier, $parPage)
     {
         global $db;
-        $requete = $db->prepare("SELECT * FROM coffre, utilisateur WHERE coffre.idUtilisateurF = utilisateur.idUtilisateur ORDER BY numCoffre LIMIT :premier, :parpage ");
+        $requete = $db->prepare("SELECT * FROM coffre, utilisateur WHERE coffre.idUtilisateurF = utilisateur.idUtilisateur AND utilisateur.etat = 1 ORDER BY numCoffre LIMIT :premier, :parpage ");
         $requete->bindValue(':premier', $premier, PDO::PARAM_INT);
         $requete->bindValue(':parpage', $parPage, PDO::PARAM_INT);
         $requete->execute();
@@ -231,4 +234,11 @@
         return $donnees;
     }
 
+    function getInfoCoffres($idCoffre)
+    {
+        global $db;
+        $requete = $db->prepare("SELECT * FROM coffre WHERE idCoffre = ?");
+        $requete->execute(array($idCoffre));
+        return $requete->fetch(PDO::FETCH_ASSOC);
+    }
 ?>

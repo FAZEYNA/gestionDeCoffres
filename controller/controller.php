@@ -110,8 +110,16 @@
             elseif($_SESSION["profil"] == "tresorier")
             {
                 //IL FAUT AUSSI RENSEIGNER LADHESION DANS LA TABLE utilisateur_coffre
-                AjoutAdherentParTresorier($idCoffreAdherent, $nom, $prenom, $telephone, $login, $pass, $mail, $adresse, $usertype);
-                $_SESSION["success"] = "Adhérent ajouté avec succès !";
+                $infosCoffre = getInfoCoffres($idCoffreAdherent); //RECUPERE LES INFOS DU COFFRE
+                if(getNumberOfAdherents($idCoffreAdherent)>=$infosCoffre["nbrAdherents"] || compareDates(date('Y-m-d'),$infosCoffre["dateFin"])) //verifie la validité du coffre
+                {
+                    $_SESSION["error"] = "Plus d'ajout d'adhérent possible !";
+                }
+                else
+                {
+                    $_SESSION["success"] = "Adhérent ajouté avec succès !";
+                    AjoutAdherentParTresorier($idCoffreAdherent, $nom, $prenom, $telephone, $login, $pass, $mail, $adresse, $usertype);
+                }
                 header("Location:../listeCoffresTresorier.php");
             }
         }
