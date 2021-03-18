@@ -14,7 +14,7 @@
     //VERIFICATION DE LA VALIDITÉ DU NUMÉRO DE TÉLÉPHONE
     function isNumValid($string)
     {
-        if(preg_match('#^(78|77|76|70|33)[0-9]{7}$#', $string)) 
+        if(preg_match('#^(78|77|76|75|70|33)[0-9]{7}$#', $string)) 
             return true;
         else
             return false;
@@ -24,7 +24,7 @@
     function getLoginAndPassword($login, $password)
     {
         global $db;
-        $requete = $db->prepare("SELECT * FROM utilisateur WHERE login = ? AND mdp = ? AND etat=?");
+        $requete = $db->prepare("SELECT * FROM utilisateur WHERE login = ? AND mdp = ? AND etat = ?");
         $requete->execute(array($login, $password, 1));
         return $requete->fetch();
     }

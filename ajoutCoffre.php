@@ -54,7 +54,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Nombre d'adhérents (*)</label>
-                    <input type="number" min="1"  max="20" class="form-control" id="nbAdherent" name="nbAdherent" required>
+                    <input type="number" min="2"  max="20" class="form-control" id="nbAdherent" name="nbAdherent" required>
                 </div>
                 <div class="form-group">
                     <label for="">Contact (*)</label>

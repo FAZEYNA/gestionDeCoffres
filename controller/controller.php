@@ -9,8 +9,8 @@
     {
         if(getLoginAndPassword($login,$password)){
             $_SESSION["login"] = $login;
-            $_SESSION["profil"] = getProfilUser($login);
-            if($password == "passer")
+            $_SESSION["profil"] = getProfilUser($login); 
+            if(strtolower($password) == "passer")
             {
                 header("Location:../changerMotDePasse.php");              
             }
@@ -26,7 +26,7 @@
             }
             elseif($_SESSION["profil"] == "user")
             {
-                $_SESSION["success"] = "Bienvenue ".ucfirst($login)." ! Content de vous voir.";
+                $_SESSION["success"] = "Bienvenue ".ucfirst(strtolower($login))." ! Content de vous voir.";
                 header("Location:../listeDesCoffres.php");
             }
         }
@@ -42,8 +42,8 @@
         if(isNumValid($telephone) && isStringAlpha($nom) && isStringAlpha($prenom) && !isLoginAlreadyTaken($login) && $pass===$pass2)
         {
             registerUser($nom, $prenom, $telephone, $login, $pass, $mail, $adresse, $usertype);
-            $_SESSION["login"] = $login;
-            $_SESSION["success"] = "Bienvenue ".ucfirst($login)." ! Content de vous voir.";
+            $_SESSION["success"] = "Bienvenue !";
+            unset($_SESSION["login"]);
             header("Location:../listeDesCoffres.php");
         }
         else
@@ -74,7 +74,7 @@
 
     if(isset($ajoutCoffre)) // GERE L'AJOUT DE COFFRES
     {
-        if($cotisation>0 && $nbAdherent>0 && compareDates($datefin, $datedebut))
+        if($cotisation>499 && $nbAdherent>1 && compareDates($datefin, $datedebut))
         {
             addCoffre($datedebut, $datefin, $nbAdherent, $cotisation, $idUtilisateur);
             $_SESSION["success"] = "Coffre ajouté avec succès !";
@@ -156,14 +156,15 @@
         if($pass != $pass2)
         {
             $_SESSION["error"] = "Les mots de passe doivent concorder !";
+            header("Location:../changerMotDePasse.php");
         }
         else
         {
             updatePassword($idUser,$pass);
             $_SESSION["success"] = "Mot de passe modifié avec succès !";
             unset($_SESSION["login"]);
+            header("Location:../ListeDesCoffres.php");
         }
-        header("Location:../changerMotDePasse.php");
     }
 
     if(isset($supprimer)) // GERE LA SUPPRESSION D'ADHERENT
