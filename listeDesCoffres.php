@@ -53,12 +53,12 @@
     <?php 
         if(isset($_SESSION["error"]) && $_SESSION["error"] != "")
         {
-            echo "<h4 class='text-danger text-center mb-4 mt-3'>".$_SESSION["error"]."</h4>";
+            echo "<h5 class='alert alert-success font-italic mt-4' role='alert'>".$_SESSION["error"]."</h5>";
             unset($_SESSION["error"]);
         }
         if(isset($_SESSION["success"]) && $_SESSION["success"] != "")
         {
-            echo "<h4 class='text-success text-center mb-4 mt-3'>".$_SESSION["success"]."</h4>";
+            echo "<h5 class='alert alert-danger font-italic mt-4' role='alert'>".$_SESSION["success"]."</h5>";
             unset($_SESSION["success"]);
         }
     ?>

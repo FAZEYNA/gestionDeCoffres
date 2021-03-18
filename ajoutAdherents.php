@@ -24,7 +24,7 @@
         <?php 
             if(isset($_SESSION["error"]) && $_SESSION["error"] != "")
             {
-                echo "<h4 class='text-danger text-center mb-4 mt-3'>".$_SESSION["error"]."</h4>";
+                echo "<h5 class='alert alert-danger font-italic mb-4 mt-3' role='alert'>".$_SESSION["error"]."</h5>";
                 unset($_SESSION["error"]);
             }
         ?>
