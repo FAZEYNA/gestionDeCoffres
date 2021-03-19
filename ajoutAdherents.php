@@ -9,7 +9,7 @@
     <nav class="navbar navbar-custom">
     <div class="container-fluid">
         <a class="navbar-brand" href="index.php">
-        <img src="assets/images/logo.png " alt="logo" width="90" height="54" class="d-inline-block align-top">
+        <img src="assets/images/logo.png " alt="logo" width="90" height="54" class="d-inline-block align-top align-top animate__animated animate__jackInTheBox animate__slower">
         </a>
         <div class="float-right d-flex flex-row">
             <form method="POST" action="controller/controller.php">
@@ -19,7 +19,7 @@
     </div>
     </nav>
 
-    <div class="container mt-5">
+    <div class="container mt-5 animate__animated animate__slideInLeft animate__slow">
         <h5 class="mb-4">AJOUT</h5>
         <?php 
             if(isset($_SESSION["error"]) && $_SESSION["error"] != "")

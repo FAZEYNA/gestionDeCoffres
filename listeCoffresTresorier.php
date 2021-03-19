@@ -11,7 +11,7 @@
 <nav class="navbar navbar-custom">
   <div class="container-fluid">
     <a class="navbar-brand" href="index.php">
-      <img src="assets/images/logo.png " alt="logo" width="90" height="54" class="d-inline-block align-top">
+      <img src="assets/images/logo.png " alt="logo" width="90" height="54" class="d-inline-block align-top animate__animated animate__jackInTheBox animate__slower">
     </a>
     <form method="POST" action="controller/controller.php">
         <button type="submit" class="btn btn-outline-danger shadow-none" name="deconnexion">Deconnexion</button>   
@@ -22,7 +22,7 @@
 <?php
 
 ?>
-<div class="container">  
+<div class="container animate__animated animate__slideInDown animate__slow">  
     <?php
         if(isset($_SESSION["success"]) && $_SESSION["success"] != "")
         {

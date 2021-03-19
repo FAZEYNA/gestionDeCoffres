@@ -11,7 +11,7 @@
 <nav class="navbar navbar-custom">
     <div class="container-fluid">
         <a class="navbar-brand" href="index.php">
-        <img src="assets/images/logo.png " alt="logo" width="90" height="54" class="d-inline-block align-top">
+        <img src="assets/images/logo.png " alt="logo" width="90" height="54" class="d-inline-block align-top align-top animate__animated animate__jackInTheBox animate__slower">
         </a>
         <form method="POST" action="controller/controller.php">
             <button type="submit" class="btn btn-outline-danger shadow-none" name="deconnexion">Deconnexion</button>   
@@ -19,7 +19,14 @@
     </div>
 </nav>
 
-<div class="container mt-3">
+<div class="container mt-3 animate__animated animate__slideInLeft animate__slow">
+    <?php 
+        if(isset($_SESSION["error"]) && $_SESSION["error"] != "")
+        {
+            echo "<h5 class='alert alert-danger font-italic mt-4' role='alert'>".$_SESSION["error"]."</h5>";
+            unset($_SESSION["error"]);
+        }
+    ?>
     <p class="display-4 text-center mb-4">Ajout de coffres</p>
     <form method="POST" action="controller/controller.php"> 
         <div class="row">

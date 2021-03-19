@@ -9,7 +9,7 @@
 <nav class="navbar navbar-custom">
   <div class="container-fluid">
     <a class="navbar-brand" href="index.php">
-      <img src="assets/images/logo.png " alt="logo" width="90" height="54" class="d-inline-block align-top">
+      <img src="assets/images/logo.png " alt="logo" width="90" height="54" class="d-inline-block align-top animate__animated animate__jackInTheBox animate__slower">
     </a>
     <div class="float-right d-flex flex-row">
         <a class="btn btn-outline-light mr-2" data-toggle="modal" data-target="#myModal" >Connexion</a>
@@ -49,16 +49,16 @@
   </div>
 </nav>
 
-<div class="container">  
+<div class="container animate__animated animate__slideInDown">  
     <?php 
         if(isset($_SESSION["error"]) && $_SESSION["error"] != "")
         {
-            echo "<h5 class='alert alert-danger font-italic mt-4' role='alert'>".$_SESSION["error"]."</h5>";
+            echo "<h5 class='alert alert-danger font-italic mt-3' role='alert'>".$_SESSION["error"]."</h5>";
             unset($_SESSION["error"]);
         }
         if(isset($_SESSION["success"]) && $_SESSION["success"] != "")
         {
-            echo "<h5 class='alert alert-success font-italic mt-4' role='alert'>".$_SESSION["success"]."</h5>";
+            echo "<h5 class='alert alert-success font-italic mt-3' role='alert'>".$_SESSION["success"]."</h5>";
             unset($_SESSION["success"]);
         }
     ?>
@@ -76,7 +76,7 @@
         $tabCoffres = getCoffresParPage($premier,$pas);
     ?>
     <!-- J'ai eu un soucis pour recupérer les ID DE COFFRES LA SOLUTION ETAIT DE METTRE POUR CHAQUE COFFRE UN FORMULAIRE -->
-    <p class="display-4 text-center mb-4 mt-3">Liste des coffres disponibles</p>
+    <p class="display-4 text-center mb-3 mt-2">Liste des coffres disponibles</p>
     <div class="row mt-3">
         <?php foreach($tabCoffres as $t){?>
             <div class="col-4 mt-3">

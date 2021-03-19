@@ -8,12 +8,12 @@
     <nav class="navbar navbar-custom">
     <div class="container-fluid">
         <a class="navbar-brand" href="index.php">
-            <img src="assets/images/logo.png " alt="logo" width="90" height="54" class="d-inline-block align-top">
+            <img src="assets/images/logo.png " alt="logo" width="90" height="54" class="d-inline-block align-top animate__animated animate__jackInTheBox animate__slower">
         </a>
     </div>
     </nav>
 
-    <div class="container mt-5">
+    <div class="container mt-5 animate__animated animate__slideInLeft animate__slow">
         <?php 
             if(isset($_SESSION["error"]) && $_SESSION["error"] != "")
             {
